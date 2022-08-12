@@ -1,0 +1,37 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-content>
+        <ion-list id="inbox-list">
+          <!-- <ion-list-header>Printer</ion-list-header>
+          <ion-note>Star Thermal Printer</ion-note> -->
+          <div *ngFor="let p of appPages; let i = index">
+            <ion-menu-toggle auto-hide="false" *ngIf="!p.subPages">
+              <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+                routerLinkActive="selected">
+                <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+            <ion-item *ngIf="p.subPages" lines="none" detail="true" [class.active-parent]=" p.open"
+              (click)="p.open = !p.open">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+            <ion-list lines="none" class="sub-menu" *ngIf="p.open">
+              <ion-menu-toggle auto-hide="false" *ngFor="let s of p.subPages; let i1 = index">
+                <ion-item routerDirection="root" [routerLink]="[s.url]" lines="none" detail="false"
+                  routerLinkActive="selected">
+                  <ion-icon slot="start" [ios]="s.icon + '-outline'" [md]="s.icon + '-sharp'"></ion-icon>
+                  <ion-label>{{ s.title }}</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+            </ion-list>
+
+          </div>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

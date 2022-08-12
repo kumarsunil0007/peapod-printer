@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Printer Settings</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="portDiscovery(portType)">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-radio-group name="selectedPrinter" [(ngModel)]="selectedPrinter.printer" ngDefaultControl
+      (ionChange)="selected()">
+      <ion-list-header>
+        <ion-label>Printers</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let printer of printerList; let i = index" lines="none">
+        <ion-label>
+          <h2>{{printer.modelName}}</h2>
+          <p>{{printer.portName}} ({{printer.macAddress}})</p>
+        </ion-label>
+        <!-- <ion-radio [value]="printer"  name="selectedPrinter" [(ngModel)]="selectedPrinter"></ion-radio> -->
+        <ion-radio slot="start" [value]="printer" (ionSelect)="selected()"></ion-radio>
+      </ion-item>
+      <ion-item *ngIf="!printerList.length" lines="none">
+        <ion-label>
+          <h2>No Printer found</h2>
+        </ion-label>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+  <ion-row *ngIf="printerList.length">
+    <ion-col>
+      <ion-button block (click)="printSample()">Print Test</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>

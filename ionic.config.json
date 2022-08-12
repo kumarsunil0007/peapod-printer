@@ -1,0 +1,7 @@
+{
+  "name": "peapod-printer",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
