@@ -5,6 +5,7 @@ import { AlertController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { PrinterService } from 'src/app/services/printer/printer.service';
 import { ReceiptService } from 'src/app/services/receipt/receipt.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
   selector: 'app-printer',
@@ -20,7 +21,8 @@ export class PrinterPage implements OnInit {
     private printerService: PrinterService,
     private alertService: AlertService,
     public alertCtrl: AlertController,
-    private receiptService: ReceiptService
+    private receiptService: ReceiptService,
+    private storage: StorageService
   ) {}
 
   ngOnInit() {
@@ -201,6 +203,7 @@ export class PrinterPage implements OnInit {
         macAddress: this.selectedPrinter.printer.macAddress,
         emulation,
       };
+      this.storage.setItem('defaultPrinter', this.defaultPrinter);
       const alert = await this.alertCtrl.create({
         header: 'Printer Saved Successfully',
       });

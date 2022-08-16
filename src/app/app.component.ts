@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
+import { StorageService } from './services/storage/storage.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -22,7 +23,19 @@ export class AppComponent {
       ],
     },
   ];
-  constructor(private navCtrl: NavController) {
-    this.navCtrl.navigateRoot('/page/setting/printer');
+  constructor(
+    private navCtrl: NavController,
+    public storage: StorageService,
+    private platform: Platform
+  ) {
+    this.init();
+  }
+  init() {
+    this.platform.ready().then(async () => {
+      const user = await this.storage.getItem('user');
+      if (!user) {
+        this.navCtrl.navigateRoot('/page/login');
+      }
+    });
   }
 }

@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage';
   providedIn: 'root',
 })
 export class StorageService {
-  private storage: Storage | null = null;
+  public storage: Storage | null = null;
   constructor(private storageObj: Storage) {
     this.init();
   }
@@ -20,8 +20,10 @@ export class StorageService {
   }
 
   async getItem(key: string) {
-    const { value } = await this.storage.get(key);
-    return value;
+    if (!this.storage) {
+      await this.init();
+    }
+    return await this.storage.get(key);
   }
 
   async removeItem(key: string) {

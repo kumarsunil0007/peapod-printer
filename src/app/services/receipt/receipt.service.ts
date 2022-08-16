@@ -808,93 +808,81 @@ export class ReceiptService {
     return threeInchReceipt;
   }
 
-  htmlReceipt(order, isKitchen?: boolean) {
-    let restaurantAddress = order.restaurant.formatted_address.replace(
-      '↵',
-      '\\n'
-    );
-    restaurantAddress = restaurantAddress.replace(/\s+/g, ' ').trim();
-    const orderTimeOrg = order.order_time.seconds;
-    // const timeStamp = order.order_time.toDate()
-    const timeStamp = order.order_time.seconds * 1000;
+  htmlReceipt(order: any, isKitchen?: boolean) {
+    console.log('order', order);
+    order.store = {
+      business_name: 'Peapod Jewelry®',
+      address_line_1: '40 US-1, Edgecomb, ME 04556',
+      address_line_2: 'Shop Online: PeapodJewelry.com',
+    };
 
-    const orderDate = moment(timeStamp).format('MMM DD, YYYY');
-    const orderTime = moment(orderTimeOrg).format('hh:mm A');
+    const orderTimeOrg = moment(order.orderDate, 'MM/DD/YYYY hh:mm A');
+    const orderDate = orderTimeOrg.format('MMM DD, YYYY');
+    const orderTime = orderTimeOrg.format('hh:mm A');
 
-    const createdTimeSec = order.created_at.seconds;
-    const createdTimestamp = order.created_at.seconds * 1000;
-    const createdDate = moment(createdTimestamp).format('MMM DD, YYYY');
-    const createdTime = moment(createdTimeSec).format('hh:mm A');
-
-    const items = order.cart;
-    const ref = order.id.replace('ordr_', '');
+    const items = order.items;
+    const ref = order.id;
     const currentTime = new Date().getTime();
     let receipt = '';
-    // tslint:disable-next-line:max-line-length
-    receipt +=
-      '<div style="width:100%;text-align:center;"><img width="150" src="assets/un-logo.png?v=' +
-      currentTime +
-      '"></div>';
-
-    if (!isKitchen) {
+    if (order.printLogo) {
       receipt +=
-        '<div style="text-align:center"><span style="font-size:23px; font-weight:bold">' +
-        order.restaurant.business_name +
+        '<div style="width:100%;text-align:center;"><img width="150" src="assets/images/logo.png?v=' +
+        currentTime +
+        '"></div>';
+    }
+
+    if (order.store) {
+      receipt +=
+        '<div style="text-align:center"><span style="font-size:16px; font-weight:bold">' +
+        order.store.business_name +
         '</span></div>';
       receipt +=
-        '<div style="text-align:center"><span style="font-size:19px; ">' +
-        this.wordWrap(restaurantAddress, 25, 1) +
+        '<div style="text-align:center"><span style="font-size:15px;display:block ">' +
+        order.store.address_line_1 +
+        '</span><span style="font-size:15px;display:block ">' +
+        order.store.address_line_2 +
         '</span></div>';
     }
-    // tslint:disable-next-line:max-line-length
-    receipt +=
-      '<div style=" width:100%"></div><h3 style="font-size:23px;background:#000;color:#fff; padding:5px;text-align:center; ">' +
-      order.type.toUpperCase() +
-      '</h3></div>';
-    // tslint:disable-next-line:max-line-length
-    receipt +=
-      '<div style=" width:100%; padding-right:5px"><span style="font-size:18px;font-weight:bold;"> Scheduled :</span><span style="width:33%;font-size:16px;"> ' +
-      orderDate +
-      '</span><span style="float:right;font-size:16px;"> ' +
-      orderTime +
-      '</span></div>';
-    // tslint:disable-next-line:max-line-length
-    receipt +=
-      '<div><p style="margin:0px;font-weight:400;color:#000"> ' +
-      order.customer.name.first +
-      ' ' +
-      order.customer.name.last +
-      '</p>';
 
-    if (!isKitchen) {
+    if (order.printCustomerInfo) {
+      receipt +=
+        '<div style="font-weight:bold; font-size:20px; width:100%;">  ----------------------------------------------- </div>';
+
+      receipt +=
+        '<div style=" width:100%; padding-right:5px; margin-top:5px;"><span style="font-size:18px;font-weight:bold;"> Cusomer Details :</span></div>';
+
+      receipt +=
+        '<div><p style="margin:0px;font-weight:400;color:#000"> ' +
+        order.billing.first_name +
+        ' ' +
+        order.billing.last_name +
+        '</p>';
       receipt +=
         '<p style = "margin:0px;font-weight:400;color:#000" > ' +
-        this.formatPhoneNumber(order.customer.phone) +
+        order.billing.email +
         ' </p>';
-      if (order.type === 'Delivery') {
-        receipt +=
-          '<p style="margin:0px;font-weight:400;color:#000"> ' +
-          order.delivery_address.replace('↵', ', ') +
-          '</p>';
-      }
-    }
+      receipt +=
+        '<p style = "margin:0px;font-weight:400;color:#000" > ' +
+        this.formatPhoneNumber(order.billing.phone) +
+        ' </p>';
 
-    receipt += '</div>';
+      receipt += '</div>';
+    }
     receipt +=
       '<div style="text-align:center; font-size:19px;margin-top:10px;">' +
-      'Order Ref: ' +
+      'Order Number: ' +
       ref +
       '</div>';
     receipt +=
       '<div style="text-align:center;font-size:17px;margin-bottom:5px;">' +
       'Ordered At: ' +
-      createdDate +
+      orderDate +
       ' ' +
-      createdTime +
+      orderTime +
       '</div>';
     receipt +=
       '<div style="font-weight:bold; font-size:20px; width:100%;">  ----------------------------------------------- </div>';
-    console.log('Items Orignal\n', items);
+
     receipt += this.printItems(items, isKitchen);
 
     receipt += '<div style="clear:both"></div>';
@@ -905,54 +893,68 @@ export class ReceiptService {
       receipt += '<div style="line-height:10px;margin-top:5px;">';
 
       receipt +=
-        '<p style = "font-weight:400; font-size:16px; width:100%;height:30px;margin:0px;color:#000;" > <span style="float:left" > Subtotal </span><span style="float:right">$' +
-        parseFloat(order.sub_total).toFixed(2) +
+        '<p style = "font-weight:400; font-size:16px; width:100%;height:30px;margin:0px;color:#000;" > <span style="float:left" > Total </span><span style="float:right">$' +
+        parseFloat(order.summary.total).toFixed(2) +
         '</span></p>';
 
       receipt +=
         '<p style="font-weight:400; font-size:16px; width:100%;height:30px;margin:0px;color:#000;"><span style="float:left;">Tax</span><span style="float:right">$' +
-        parseFloat(order.tax_total).toFixed(2) +
+        parseFloat(order.summary.totalTax).toFixed(2) +
         '</span></p>';
-      receipt +=
-        '<p style="font-weight:400; font-size:16px; width:100%;height:30px;margin:0px;color:#000;"><span style="float:left">Gratuity</span><span style="float:right">$' +
-        parseFloat(order.grat_total).toFixed(2) +
-        '</span></p>';
-      if (order.type === 'Delivery') {
+
+      if (parseFloat(order.summary.discountTotal) > 0) {
         receipt +=
-          '<p style="font-weight:400; font-size:16px; width:100%;height:30px;margin:0px;color:#000;"><span style="float:left">Service Charges</span><span style="float:right">$' +
-          parseFloat(order.delivery_charge).toFixed(2) +
+          '<p style="font-weight:400; font-size:16px; width:100%;height:30px;margin:0px;color:#000;"><span style="float:left">Discount</span><span style="float:right">$' +
+          parseFloat(order.summary.discountTotal).toFixed(2) +
           '</span></p>';
       }
 
-      receipt +=
+      if (parseFloat(order.summary.shippingTotal) > 0) {
+        receipt +=
+          '<p style="font-weight:400; font-size:16px; width:100%;height:30px;margin:0px;color:#000;"><span style="float:left">Shipping Total</span><span style="float:right">$' +
+          parseFloat(order.summary.shippingTotal).toFixed(2) +
+          '</span></p>';
+      }
+
+      /*   receipt +=
         // tslint:disable-next-line:max-line-length
         '<p style="font-weight:bold;font-size:18px; width:100%;height:25px;margin:0px;color:#000;"><span style="float:left">Total</span><span style="float:right">' +
         parseFloat(order.total).toFixed(2) +
-        '</span></p></div>';
+        '</span></p></div>'; */
     } else {
       this.items = [];
       receipt += this.getConsolidatedList(items);
     }
 
+    // receipt +=
+    //   '<div style="width:100%;text-align:center;margin:0px; color:#000; margin-top:5px"><img width="120" src="assets/images/logo.png?v=' +
+    //   currentTime +
+    //   '"></div>';
+    // receipt +=
+    //   '<div style="font-weight:400; font-size:17px; width:100%;text-align:center;">Powered by <span style="font-size:17px;font-weight:700;margin-bottom:20px">menuCLOUD</span></div>';
+    // // receipt += '<span style="font-size:24px; font-weight:bold">----------------------------------------------------------</span>'
     receipt +=
-      '<div style="width:100%;text-align:center;margin:0px; color:#000; margin-top:5px"><img width="120" src="assets/logo-main.png?v=' +
-      currentTime +
-      '"></div>';
+      '<br><br><br><span style="font-size:18px; font-weight:200;text-align:center;width:100%;">  Signature: .................................. </span>';
     receipt +=
-      '<div style="font-weight:400; font-size:17px; width:100%;text-align:center;">Powered by <span style="font-size:17px;font-weight:700;margin-bottom:20px">menuCLOUD</span></div>';
-    // receipt += '<span style="font-size:24px; font-weight:bold">----------------------------------------------------------</span>'
+      '<br><br><p style="font-weight:400; font-size:17px; width:100%;text-align:center;">Thank You!</p>';
+    receipt +=
+      '<span style="font-size:20px; font-weight:300;text-align:center;width:100%;">  ----------------------------------------------- </span>';
+    if (order.footer) {
+      receipt += `<p style="font-weight:300;font-size:16px;line-height:20px;margin:5px 0px;height:30px;color:#000;width:100%;text-align:center;">
+      ${order.footer.line_1}<br>${order.footer.line_2}<br><b>${order.footer.site_url}</b></p>`;
+    }
     return receipt;
   }
 
   printItems(items, isConsolidated: boolean) {
     let receipt = '';
     items.forEach((item) => {
-      let itemName = this.wordWrap(item.title, 25);
+      let itemName = this.wordWrap(item.name, 25);
       if (itemName.length < 25) {
         itemName = itemName + ' '.repeat(24 - itemName.length);
       }
       receipt +=
-        '<div style="width:100%;margin-bottom:3px; clear:both"><p style="margin:0px;font-weight:600;color:#000;height:25px;width:100%"><span style="float:left">&nbsp;' +
+        '<div style="width:100%; clear:both"><p style="margin:0px;font-weight:600;color:#000;height:25px;width:100%"><span style="float:left">&nbsp;' +
         item.quantity +
         'x ' +
         itemName +
@@ -965,106 +967,72 @@ export class ReceiptService {
       }
 
       receipt += '</p>';
-      if (item.order_selections.length) {
-        const subItems = item.order_selections;
-        subItems.forEach((subItem) => {
-          if (subItem.selections.length) {
-            const toppings = subItem.selections;
-            toppings.forEach((topping) => {
-              if (topping.quantity) {
-                let toppingName = this.wordWrap(topping.label, 25, 1);
-                if (toppingName.length < 25) {
-                  toppingName =
-                    toppingName + ' '.repeat(21 - toppingName.length);
-                }
-                let price = '';
-                if (!isConsolidated) {
-                  price =
-                    topping.price !== ''
-                      ? '<span style="float:right">$' +
-                        parseFloat(topping.price).toFixed(2) +
-                        '</span>'
-                      : '';
-                }
+      if (item.meta.length && isConsolidated) {
+        receipt +=
+          '<p style="margin:0px;font-weight:500;color:#000;height:18px;width:100%; clear:both">Details:</p>';
+        const metaItems = item.meta;
+        metaItems.forEach((metaItem) => {
+          let metaKey = this.wordWrap(metaItem.key, 25, 1);
+          let metaValue = this.wordWrap(metaItem.value, 25, 1);
+          let printToNextLine = false;
+          if (metaKey.length < 22) {
+            metaKey = metaKey + ' '.repeat(21 - metaKey.length);
+          }
+          if (metaValue.length < 22) {
+            metaValue = metaValue + ' '.repeat(21 - metaValue.length);
+          } else {
+            printToNextLine = true;
+          }
+          let price = '';
+          if (!isConsolidated && metaItem.price) {
+            price =
+              metaItem.price !== ''
+                ? '<span style="float:right">$' +
+                  parseFloat(metaItem.price).toFixed(2) +
+                  '</span>'
+                : '';
+          }
 
-                receipt +=
-                  // tslint:disable-next-line:max-line-length
-                  '<p style="margin:0px;font-weight:400;color:#000;height:20px;width:100%; clear:both"><span style="float-left">&nbsp;&nbsp;&nbsp;' +
-                  topping.quantity +
-                  'x ' +
-                  toppingName +
-                  '</span>' +
-                  price +
-                  '</p>';
-              }
-            });
+          receipt += `<p style="margin:0px;font-weight:500;color:#000;height:18px;width:100%; clear:both">
+            <span style="float-left">&nbsp;&nbsp;&nbsp;
+            ${metaKey} : ${!printToNextLine ? metaValue : ''}
+            </span>
+            </p>`;
+          if (printToNextLine) {
+            receipt += `<p style="margin:0px;font-weight:500;color:#000;height:18px;width:100%; clear:both">
+            <span style="float-left">&nbsp;&nbsp;&nbsp;
+            ${metaValue}
+            </span>
+            </p>`;
           }
         });
       }
-      receipt += '</div>';
+      receipt += '</div><br><br>';
     });
     return receipt;
   }
 
   getConsolidatedList(items) {
-    items.forEach((item, index) => {
+    items.forEach((item: any) => {
       this.addItem(item);
     });
-    console.log('Consildated items:\n', this.items);
     const receipt = this.printItems(this.items, true);
     return receipt;
   }
 
   addItem(item) {
     const tempItems = this.items;
-    const itemIndex = _.findIndex(tempItems, { title: item.title });
+    const itemIndex = _.findIndex(tempItems, { name: item.name });
 
     if (itemIndex > -1) {
       tempItems[itemIndex].quantity += item.quantity;
-      item.order_selections.forEach((optionCat) => {
-        const orderSelections = tempItems[itemIndex].order_selections;
+      /*   item.meta.forEach((optionCat) => {
+        const orderSelections = tempItems[itemIndex].meta;
         const toppingIndex = _.findIndex(orderSelections, {
-          title: optionCat.title,
+          title: optionCat.key,
         });
 
-        if (toppingIndex > -1) {
-          optionCat.selections.forEach((option) => {
-            const categoryToppings =
-              tempItems[itemIndex].order_selections[toppingIndex].selections;
-            const optionIndex = _.findIndex(categoryToppings, {
-              label: option.label,
-            });
-            if (
-              optionIndex > -1 &&
-              option.quantity !== undefined &&
-              option.quantity > 0
-            ) {
-              const lastOption =
-                tempItems[itemIndex].order_selections[toppingIndex].selections[
-                  optionIndex
-                ];
-              let currentQty = 0;
-              if (lastOption.quantity === undefined) {
-                currentQty = 0;
-              } else {
-                currentQty = lastOption.quantity;
-              }
-
-              tempItems[itemIndex].order_selections[toppingIndex].selections[
-                optionIndex
-              ].quantity = currentQty + option.quantity;
-            } else {
-              if (option.quantity) {
-                tempItems[itemIndex].order_selections[
-                  toppingIndex
-                ].selections.push(option);
-              }
-            }
-          });
-        } else {
-          tempItems[itemIndex].order_selections.push(optionCat);
-        }
-      });
+      }); */
     } else {
       tempItems.push(item);
     }

@@ -20,7 +20,9 @@
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
     "@awesome-cordova-plugins/core": "^5.44.0",
+    "@awesome-cordova-plugins/file": "^5.44.0",
     "@awesome-cordova-plugins/star-prnt": "^5.44.0",
+    "@capacitor/core": "4.0.1",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/star-prnt": "^5.36.0",
     "@ionic/angular": "^6.1.9",
@@ -28,6 +30,7 @@
     "@ionic/storage": "^3.0.6",
     "@ionic/storage-angular": "^3.0.6",
     "cordova-plugin-starprnt": "^2.2.0",
+    "html2canvas": "^1.4.1",
     "moment": "^2.29.4",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
@@ -51,6 +54,7 @@
     "@typescript-eslint/parser": "5.3.0",
     "cordova-android": "^11.0.0",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-file": "^7.0.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -80,7 +84,10 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-starprnt": {},
-      "cordova-sqlite-storage": {}
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-file": {
+        "ANDROIDX_WEBKIT_VERSION": "1.4.0"
+      }
     },
     "platforms": [
       "android"

@@ -8,7 +8,31 @@
 </ion-header>
 
 <ion-content padding>
-  <div>
-    <p>Home Page</p>
-  </div>
+  <ion-grid>
+    <ion-row padding>
+      <ion-col size-md="6" size-lg="5" size-xs="12">
+        <ion-item>
+          <ion-label position="fixed">Order No. :</ion-label>
+          <ion-input [(ngModel)]="orderNumber" type="number" placeholder="e.g. 12345" autocomplete="false"
+            inputmode="tel">
+          </ion-input>
+          <ion-button type="button" color="primary" (click)="findOrder()">Search</ion-button>
+        </ion-item>
+      </ion-col>
+      <ion-col size-md="6" size-lg="5" size-xs="12">
+        <div [innerHTML]="errorMsg"></div>
+      </ion-col>
+
+      <ion-col size-md="6" size-lg="5" size-xs="12">
+        <div [innerHTML]="orderHTML"></div>
+      </ion-col>
+
+      <ion-col size-md="6" size-lg="5" size-xs="12" *ngIf="order">
+        <ion-button (click)="printCustomerReceipt(false)">Print</ion-button>
+
+        <img [src]="receiptImage" *ngIf="receiptImage" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
