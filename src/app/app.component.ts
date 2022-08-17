@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, Platform } from '@ionic/angular';
-import { StorageService } from './services/storage/storage.service';
+import { Router } from '@angular/router';
+import { AuthenticationService } from './services/authentication/authentication.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -24,18 +24,13 @@ export class AppComponent {
     },
   ];
   constructor(
-    private navCtrl: NavController,
-    public storage: StorageService,
-    private platform: Platform
-  ) {
-    this.init();
-  }
-  init() {
-    this.platform.ready().then(async () => {
-      const user = await this.storage.getItem('user');
-      if (!user) {
-        this.navCtrl.navigateRoot('/page/login');
-      }
-    });
+    private router: Router,
+    public authService: AuthenticationService
+  ) {}
+
+  async logout() {
+    document.getElementById('printPOS').innerHTML = '';
+    await this.authService.logout();
+    this.router.navigateByUrl('/', { replaceUrl: true });
   }
 }

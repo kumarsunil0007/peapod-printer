@@ -11,12 +11,14 @@
   <ion-grid>
     <ion-row padding>
       <ion-col size-md="6" size-lg="5" size-xs="12">
-        <ion-item>
+        <ion-item class="order-item">
           <ion-label position="fixed">Order No. :</ion-label>
           <ion-input [(ngModel)]="orderNumber" type="number" placeholder="e.g. 12345" autocomplete="false"
             inputmode="tel">
           </ion-input>
-          <ion-button type="button" (click)="findOrder()" class="search-btn"><ion-icon name="search-outline"></ion-icon></ion-button>
+          <ion-button (click)="findOrder()" fill="outline" shape="round" class="search-btn">
+            <ion-icon slot="start" name="search-outline"></ion-icon> Search
+          </ion-button>
         </ion-item>
       </ion-col>
       <ion-col size-md="6" size-lg="5" size-xs="12">
@@ -24,13 +26,26 @@
       </ion-col>
 
       <ion-col size-md="6" size-lg="5" size-xs="12">
-        <div [innerHTML]="orderHTML" class="order-html"></div>
+        <div [innerHTML]="orderHTML"  [ngClass]="orderHTML === '' ? '' : 'order-html'"></div>
       </ion-col>
 
-      <ion-col size-md="6" size-lg="5" size-xs="12" *ngIf="order" class="text-center">
-        <ion-button (click)="printCustomerReceipt(false)" class="print-btn">Print</ion-button>
 
-        <img [src]="receiptImage" *ngIf="receiptImage" />
+    </ion-row>
+    <ion-row *ngIf="order">
+      <ion-col size-md="6" size-lg="5" *ngIf="receiptImage" size-xs="12" class="text-center">
+        <img [src]="receiptImage" />
+      </ion-col>
+      <ion-col size-xs="7" class="quantity-outer">
+        <div class="quantity-btns">
+        <ion-icon name="remove-circle" (click)="decrement()" class="quantity-controls" size="large"></ion-icon>
+        <span class="print-quantity">{{selectedCopies}}</span>
+        <ion-icon name="add-circle" (click)="increment()" class="quantity-controls" size="large"></ion-icon>
+        </div>
+      </ion-col>
+      <ion-col size-xs="5" class="text-right">
+        <ion-button fill="outline" shape="round" class="print-btn" (click)="printCustomerReceipt(false)">
+          <ion-icon slot="start" name="print"></ion-icon>Print 
+        </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

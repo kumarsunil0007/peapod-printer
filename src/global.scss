@@ -24,12 +24,55 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
-body{
-    font-family: 'Poppins', sans-serif !important;
+
+body {
+    font-family: 'Poppins', sans-serif ;
 }
-h1,h2,h3,h4,h5,h6{  
-    font-family: 'Poppins', sans-serif;
-}
-.alert-wrapper.sc-ion-alert-ios{
+
+.alert-wrapper.sc-ion-alert-ios {
     border-radius: 0;
 }
+
+#printPOS,
+.order-html {
+    font-family: initial !important;
+}
+
+.login-error {
+    a {
+        display: block;
+        color: #65ba48;
+        text-decoration: none;
+    }
+}
+
+.order-html {
+    span {
+        display: block;
+    }
+
+    p {
+        display: block;
+        text-align: center;
+    }
+
+    p:last-child {
+        display: block;
+        text-align: center;
+        font-weight: normal;
+    }
+
+    p:first-child,
+    p:nth-child(2),
+    p:nth-child(3) {
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    p:first-child {
+        font-weight: 600;
+    }
+}
+app-printer{
+    width: 100%;}

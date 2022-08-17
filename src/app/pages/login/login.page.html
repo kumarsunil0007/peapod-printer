@@ -1,35 +1,39 @@
 <div class="login-form">
   <ion-content padding>
-  <form [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off" >
-    <ion-grid>
-      <ion-row justify-content-center padding>
-        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
-          <div class="text-center">
-            <img src="../assets/images/logo.png">
-            <!-- <h3>Login</h3> -->
-          </div>
-          <div padding>
-            <ion-item>
-              <ion-label position="stacked">Username or Email</ion-label>
-              <ion-input formControlName="username" type="text" placeholder="Username or Email" autocomplete="off"
-                required></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="stacked">Password</ion-label>
-              <ion-input formControlName="password" type="password" placeholder="Password" autocomplete="off" required>
-              </ion-input>
-            </ion-item>
-          </div>
-          <div padding>
-            <ion-button size="large" type="submit" [disabled]="loginForm.invalid" expand="block">Login
-            </ion-button>
-          </div>
-          <div class="error mt-2 login-error" [innerHTML]="errorMsg" padding>
+    <form [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off">
+      <ion-grid>
+        <ion-row justify-content-center padding>
+          <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+            <div class="text-center logo">
+              <img src="../assets/images/logo.png">
+              <!-- <h3>Login</h3> -->
+            </div>
+            <div padding>
+              <ion-item>
+                <ion-label position="stacked">Username or Email</ion-label>
+                <ion-input formControlName="username" type="text" placeholder="Username or Email" autocomplete="off"
+                  required>
+                  <ion-icon name="person-outline" class="login-icons"></ion-icon> 
+                </ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="stacked">Password</ion-label>
+                <ion-input formControlName="password" type="password" placeholder="Password" autocomplete="off"
+                  required><ion-icon name="lock-closed-outline" class="login-icons"></ion-icon>
+                </ion-input>
+              </ion-item>
+            </div>
+            <div padding>
+              <ion-button size="large" class="login-btn" type="submit" [disabled]="loginForm.invalid" fill="outline"
+                expand="block">Login
+              </ion-button>
+            </div>
+            <div class="error mt-2 login-error" [innerHTML]="errorMsg" padding>
 
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </form>
-</ion-content>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ion-content>
 </div>

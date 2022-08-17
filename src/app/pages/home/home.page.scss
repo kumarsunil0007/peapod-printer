@@ -12,35 +12,62 @@ ion-header {
 }
 
 ion-content {
+    .order-item{
+        --padding-start:0px;
+        --inner-padding-end: 0px;
+    }
     .text-center{
         text-align: center;
     }
     ion-item{
         ion-label {
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 500;
+            font-size: 1rem;
             margin-bottom: 10px;
             overflow: visible;
         }
         .search-btn{
-            background: #65ba48;
             --background: #65ba48;
+            color: #fff;
+            --border-color: #fff;
+           height: 35px;
         }
     }
     ion-button.print-btn {
-        background: #65ba48;
-        width: fit-content;
         --background: #65ba48;
+        --border-color: #fff;
         height: 40px;
-        padding: 8px 20px;
-        width: 250px;
+        --background-activated: #65ba48;
+        --background-focused: #65ba48;
         font-size: 16px;
         margin: 20px auto;
-        font-family: "Poppins", sans-serif;
+        color: #ffffff;
+        letter-spacing: 0.2px;
     }
     .order-html{
         text-align: center;
+        border: 1px solid #b0b0b0;
         padding: 20px;
-        // border: 1px solid #ddd;
     }
+    
+   
+    .quantity-outer {
+        padding: 7% 0%;
+        .quantity-btns {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+    }
+    .quantity-controls{
+        display: inline-block;
+    }
+    .print-quantity{
+        font-size: 1.5rem;
+    padding: 0px 5px;
+    line-height: 30px;
+    }
+}
+.text-right {
+    text-align: right;
 }

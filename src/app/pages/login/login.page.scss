@@ -3,9 +3,14 @@
     min-height: 100%;
     justify-content: center;
     align-items: center;
-    padding: 100px 0px;
-    .text-center{
+    padding: 100px 12px;
+
+    .text-center {
         text-align: center;
+    }
+
+    .logo {
+        margin-bottom: 10px;
     }
 
     h3 {
@@ -14,53 +19,57 @@
     }
 
     ion-item {
-        --padding-start: 10px;
+        --inner-padding-end: 0;
+        --padding-start: 0;
         margin-bottom: 10px;
         --inner-border-width: 0px 0px 0px 0px;
         --border-width: 0 0 0px 0;
 
         ion-label {
-            font-size: 15px;
-            margin-bottom: 5px;
-            font-family: "Poppins", sans-serif;
+            font-size: 1rem;
+            margin-bottom: 10px;
         }
 
         ion-input {
             border: 1px solid #ddd;
-            --padding-start: 12px;
+            --padding-start: 10px;
+            --border-radius: 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+
+            ion-icon.login-icons {
+                padding-left: 10px;
+            }
+        }
+        ion-input.has-focus{
+            border: 1px solid #65ba48 ;
         }
 
     }
 
-    ion-button {
+    ion-button.login-btn {
         letter-spacing: 1px;
-        --color: #fffffff;
         color: #ffffff;
-        width: -moz-fit-content;
-        width: fit-content;
         --background: #65ba48;
-        background: #65ba48;
-        height: 40px;
-        padding: 8px 20px;
-        width: 250px;
+        --border-color: #fff;
+        --border-radius: 30px;
+
+        height: 42px;
         font-size: 16px;
-        margin: 0 auto;
-        margin-top: 20px;
-        font-family: "Poppins", sans-serif;
-        opacity: 1;
+        margin-top: 30px;
+        width: 100%;
+        margin-inline: 0px;
+        --background-activated: #65ba48;
+        --background-focused: #65ba48;
     }
+
     .login-error {
         text-align: center;
         margin-top: 20px;
-        line-height: 20px;
-        font-size: 12px;
+        line-height: 24px;
+        font-size: .875rem;
         color: red;
-        font-family: "Poppins", sans-serif;
-        a {
-            color: #65ba48 !important; 
-            margin-top: 15px !important;
-            display: inline-block !important;
-        }
+
     }
 
 }

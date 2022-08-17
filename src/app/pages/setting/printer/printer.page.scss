@@ -16,3 +16,14 @@ ion-header {
        
     }
 }
+ion-content{
+    ion-list{
+        ion-item.item-radio-checked {
+            --background: #65ba4817;
+            ion-radio{
+                --color-checked: green;
+            }
+        }
+    }
+    
+}
