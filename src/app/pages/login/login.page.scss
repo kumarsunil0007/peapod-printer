@@ -20,7 +20,7 @@
         --border-width: 0 0 0px 0;
 
         ion-label {
-            font-size: 15px;
+            font-size: 1.5rem;
             margin-bottom: 5px;
             font-family: "Poppins", sans-serif;
         }
@@ -32,22 +32,18 @@
 
     }
 
-    ion-button {
+    ion-button.login-btn {
         letter-spacing: 1px;
-        --color: #fffffff;
         color: #ffffff;
         width: -moz-fit-content;
         width: fit-content;
         --background: #65ba48;
-        background: #65ba48;
+        --border-color:#fff;
         height: 40px;
-        padding: 8px 20px;
-        width: 250px;
         font-size: 16px;
-        margin: 0 auto;
         margin-top: 20px;
         font-family: "Poppins", sans-serif;
-        opacity: 1;
+        width: 100%;
     }
     .login-error {
         text-align: center;

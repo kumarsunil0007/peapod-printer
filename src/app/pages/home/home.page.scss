@@ -23,24 +23,35 @@ ion-content {
             overflow: visible;
         }
         .search-btn{
-            background: #65ba48;
             --background: #65ba48;
+            color: #fff;
+            --border-color: #fff;
+           height: 35px;
         }
     }
     ion-button.print-btn {
-        background: #65ba48;
-        width: fit-content;
         --background: #65ba48;
+        --border-color: #fff;
         height: 40px;
-        padding: 8px 20px;
-        width: 250px;
         font-size: 16px;
         margin: 20px auto;
         font-family: "Poppins", sans-serif;
+        color: #ffffff
     }
     .order-html{
         text-align: center;
         padding: 20px;
-        // border: 1px solid #ddd;
+    }
+   
+    .quantity-outer {
+        padding: 7% 5%;
+    }
+    .quantity-controls{
+        display: inline-block;
+    }
+    .print-quantity{
+        font-size: 31px;
+        padding: 0px 5px;
+        vertical-align: bottom;
     }
 }

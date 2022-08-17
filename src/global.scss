@@ -28,8 +28,12 @@ body{
     font-family: 'Poppins', sans-serif !important;
 }
 h1,h2,h3,h4,h5,h6{  
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif !important;
 }
 .alert-wrapper.sc-ion-alert-ios{
     border-radius: 0;
+}
+
+#printPOS{
+    font-family: initial !important;
 }

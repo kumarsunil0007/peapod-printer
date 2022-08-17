@@ -1,15 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpService } from 'src/app/services/http/http.service';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormControl,
-} from '@angular/forms';
-
-import apiRoutes from 'src/app/config/apiRoutes';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { NavController } from '@ionic/angular';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -20,14 +13,14 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
   errorMsg = '';
   constructor(
-    private http: HttpService,
-    public formBuilder: FormBuilder,
+    public fb: FormBuilder,
     public storage: StorageService,
-    public navCtrl: NavController
+    public router: Router,
+    public authService: AuthenticationService
   ) {}
 
   ngOnInit() {
-    this.loginForm = this.formBuilder.group({
+    this.loginForm = this.fb.group({
       username: [
         '',
         Validators.compose([Validators.required, Validators.minLength(5)]),
@@ -39,8 +32,6 @@ export class LoginPage implements OnInit {
     });
   }
 
-  checkAuth() {}
-
   login() {
     if (this.loginForm.invalid) {
       console.log('invalid form');
@@ -51,12 +42,10 @@ export class LoginPage implements OnInit {
       username: this.loginForm.controls.username.value,
       password: this.loginForm.controls.password.value,
     };
-    this.http.post(apiRoutes.LOGIN, formData).subscribe(
+    this.authService.login(formData).subscribe(
       async (resp) => {
-        if (resp.token) {
-          await this.storage.setItem('user', resp);
-          this.navCtrl.navigateRoot('/page/home');
-        }
+        console.log('login resp', resp);
+        this.router.navigateByUrl('/page/home', { replaceUrl: true });
       },
       (err) => {
         this.errorMsg = err.message;

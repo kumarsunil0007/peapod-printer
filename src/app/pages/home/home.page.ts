@@ -17,6 +17,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 export class HomePage implements OnInit {
   errorMsg: any;
   orderNumber = '17539';
+  selectedCopies = 1;
   order: any = {
     id: 17068,
     orderDate: '06/17/2022 10:17 AM',
@@ -341,5 +342,16 @@ export class HomePage implements OnInit {
           resolve(null);
         });
     });
+  }
+  increment() {
+    if (this.selectedCopies <= 3) {
+      this.selectedCopies++;
+    }
+  }
+
+  decrement() {
+    if (this.selectedCopies > 1) {
+      this.selectedCopies--;
+    }
   }
 }
