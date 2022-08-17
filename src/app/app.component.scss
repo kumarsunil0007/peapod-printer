@@ -63,6 +63,7 @@ ion-menu.md ion-item ion-icon {
 
 ion-menu.md ion-item ion-label {
   font-weight: 500;
+  font-family: "Poppins", sans-serif;
 }
 
 ion-menu.ios ion-content {
@@ -89,7 +90,7 @@ ion-menu.ios ion-item {
 }
 
 ion-menu.ios ion-item.selected ion-icon {
-  color: var(--ion-color-primary);
+  color: #fff;
 }
 
 ion-menu.ios ion-item ion-icon {
@@ -121,4 +122,8 @@ ion-note {
 ion-item.selected {
   background:#65ba48;
   --background: #65ba48;
+  ion-label{
+    color:#fff;
+      font-family: "Poppins", sans-serif;
+  }
 }
