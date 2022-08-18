@@ -41,10 +41,14 @@
                 padding-left: 10px;
             }
         }
-        ion-input.has-focus{
+       /*  ion-input.has-focus{
             border: 1px solid #65ba48 ;
-        }
+        } */
 
+    }
+
+    ion-item.ion-invalid{
+        border-radius: 20px;
     }
 
     ion-button.login-btn {

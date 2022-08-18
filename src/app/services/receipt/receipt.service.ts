@@ -852,7 +852,7 @@ export class ReceiptService {
         '<div style=" width:100%; padding-right:5px; margin-top:5px;"><span style="font-size:18px;font-weight:bold;"> Cusomer Details :</span></div>';
 
       receipt +=
-        '<div><p style="margin:0px;font-weight:400;color:#000"> ' +
+        '<div><p style="margin:0px;font-weight:500;color:#000"> ' +
         order.billing.first_name +
         ' ' +
         order.billing.last_name +
@@ -934,13 +934,13 @@ export class ReceiptService {
     //   '<div style="font-weight:400; font-size:17px; width:100%;text-align:center;">Powered by <span style="font-size:17px;font-weight:700;margin-bottom:20px">menuCLOUD</span></div>';
     // // receipt += '<span style="font-size:24px; font-weight:bold">----------------------------------------------------------</span>'
     receipt +=
-      '<br><br><br><span style="font-size:18px; font-weight:200;text-align:center;width:100%;">  Signature: .................................. </span>';
+      '<br><br><br><span style="font-size:18px; font-weight:400;text-align:center;width:100%;">  Signature: .................................. </span>';
     receipt +=
       '<br><br><p style="font-weight:400; font-size:17px; width:100%;text-align:center;">Thank You!</p>';
     receipt +=
-      '<span style="font-size:20px; font-weight:300;text-align:center;width:100%;">  ----------------------------------------------- </span>';
+      '<span style="font-size:20px; font-weight:300;text-align:center;width:100%;">  -------------------------------------------------------- </span>';
     if (order.footer) {
-      receipt += `<p style="font-weight:300;font-size:16px;line-height:20px;margin:5px 0px;height:30px;color:#000;width:100%;text-align:center;">
+      receipt += `<p style="font-weight:400;font-size:16px;line-height:20px;margin:5px 0px;height:30px;color:#000;width:100%;text-align:center;">
       ${order.footer.line_1}<br>${order.footer.line_2}<br><b>${order.footer.site_url}</b></p>`;
     }
     return receipt;

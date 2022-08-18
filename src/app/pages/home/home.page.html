@@ -26,13 +26,13 @@
       </ion-col>
 
       <ion-col size-md="6" size-lg="5" size-xs="12">
-        <div [innerHTML]="orderHTML"  [ngClass]="orderHTML === '' ? '' : 'order-html'"></div>
+        <div [innerHTML]="orderHTML" [ngClass]="orderHTML === '' ? '' : 'order-html'"></div>
       </ion-col>
 
 
     </ion-row>
     <ion-row *ngIf="order">
-      <ion-col size-md="6" size-lg="5" *ngIf="receiptImage" size-xs="12" class="text-center">
+      <!--  <ion-col size-md="6" size-lg="5" *ngIf="receiptImage" size-xs="12" class="text-center">
         <img [src]="receiptImage" />
       </ion-col>
       <ion-col size-xs="7" class="quantity-outer">
@@ -41,10 +41,10 @@
         <span class="print-quantity">{{selectedCopies}}</span>
         <ion-icon name="add-circle" (click)="increment()" class="quantity-controls" size="large"></ion-icon>
         </div>
-      </ion-col>
-      <ion-col size-xs="5" class="text-right">
+      </ion-col> -->
+      <ion-col size-xs="12" class="text-center">
         <ion-button fill="outline" shape="round" class="print-btn" (click)="printCustomerReceipt(false)">
-          <ion-icon slot="start" name="print"></ion-icon>Print 
+          <ion-icon slot="start" name="print"></ion-icon>Print
         </ion-button>
       </ion-col>
     </ion-row>

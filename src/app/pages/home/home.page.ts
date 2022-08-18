@@ -16,85 +16,9 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 })
 export class HomePage implements OnInit {
   errorMsg: any;
-  orderNumber = '17539';
+  orderNumber = '';
   selectedCopies = 1;
-  order: any = {
-    id: 17068,
-    orderDate: '06/17/2022 10:17 AM',
-    billing: {
-      first_name: 'Jorge',
-      last_name: 'Fernadie',
-      company: '',
-      address_1: '',
-      address_2: '',
-      city: '',
-      state: '',
-      postcode: '',
-      country: '',
-      email: 'info@peapodjewelry.com',
-      phone: '989-908-1234',
-    },
-    shipping: {
-      first_name: '',
-      last_name: '',
-      company: '',
-      address_1: '',
-      address_2: '',
-      city: '',
-      state: '',
-      postcode: '',
-      country: '',
-      phone: '',
-    },
-    summary: {
-      discountTotal: '0',
-      discountTax: '0',
-      shippingTotal: '0',
-      shippingTax: '0',
-      total: '896.76',
-      cartTax: '46.76',
-      totalTax: '46.76',
-    },
-    payment: '',
-    items: [
-      {
-        name: 'Easter Bunny Charm - Sterling Silver',
-        quantity: 1,
-        tax: '15.13',
-        total: '275.00',
-        meta: [
-          {
-            key: 'Metal',
-            value: 'silver',
-          },
-        ],
-      },
-      {
-        name: "Mother's Peapod® 1 Earrings - Sterling Silver",
-        quantity: 1,
-        tax: '9.35',
-        total: '170.00',
-        meta: [
-          {
-            key: 'Metal',
-            value: 'silver',
-          },
-        ],
-      },
-      {
-        name: 'Peapod Sea Turtle Necklace - Sterling Silver',
-        quantity: 1,
-        tax: '22.28',
-        total: '405.00',
-        meta: [
-          {
-            key: 'Metal',
-            value: 'silver',
-          },
-        ],
-      },
-    ],
-  };
+  order: any = null;
   orderHTML = '';
   defaultPrinter: any = null;
   printContent: string;
@@ -128,6 +52,8 @@ export class HomePage implements OnInit {
           this.order = resp.data;
           this.orderHTML = this.receiptService.htmlReceipt(resp.data, false);
         } else {
+          this.order = null;
+          this.orderHTML = '';
           this.errorMsg = resp.message;
         }
       },
@@ -177,7 +103,14 @@ export class HomePage implements OnInit {
   }
 
   /************** Test functions */
-  async printCustomerReceipt(consolidated?: boolean, print = false) {
+  async printCustomerReceipt(consolidated?: boolean) {
+    if (!this.defaultPrinter) {
+      await this.alertService.createAlert(
+        'Please Connect a Printer',
+        'Error: No Printer'
+      );
+      return;
+    }
     const commands = this.receiptService.htmlReceipt(this.order, consolidated);
     const printElement = document.getElementById('printPOS');
     printElement.innerHTML = commands;
@@ -216,70 +149,24 @@ export class HomePage implements OnInit {
 
       const receiptData = dataUrl.split(',')[1];
       const contentBlob = this.b64toBlob(receiptData, 'image/png');
-      this.receiptImage = dataUrl;
 
-      // const logoContent = await this.getBase64Image(logoURL)
-      // if (logoContent) {
-      //   const logoBlob = this.b64toBlob(logoContent, 'image/png')
-      //   const logoUri: string = await this.saveFile(logoBlob, 'logo.png')
-      //   if (logoUri) {
-      //     // await this.printImageContent(logoUri, false)
-      //   }
-      //   console.log('Time 1', new Date().getSeconds())
-      //   console.log('logoContent', logoUri)
-
-      // }
-      if (print) {
-        const contentURI = await this.saveFile(contentBlob, 'receipt.png');
-        console.log('Receipt Content:\n\n', receiptData);
-        console.log('Receipt contentURI', contentURI);
-        if (contentURI) {
-          console.log('Time 2', new Date().getSeconds());
-          await this.printImageContent(contentURI, true);
-        }
+      const contentURI = await this.saveFile(contentBlob, 'receipt.png');
+      if (contentURI) {
+        const loading = await this.alertService.createLoading(
+          'Communicating...'
+        );
+        loading.present();
+        console.log('Time 2', new Date().getSeconds());
+        await this.printImageContent(contentURI, true);
+        loading.dismiss();
       }
-
-      // this.getBase64Image(logoURL).then((logoData) => {
-      //   const logoBlob = this.b64toBlob(logoData, 'image/png')
-      //   this.saveFile(logoBlob, 'logo.png').then(async (logoUri) => {
-      //     console.log('Logo URi', logoUri)
-      //     if (logoUri) {
-      //       console.log('Time 1', new Date().getSeconds())
-      //       await this.delay(3000)
-
-      //       this.saveFile(blob, 'receipt.png').then(contentURI => {
-      //         console.log('contentURI', contentURI)
-
-      //         this.printImage(contentURI, true)
-      //       })
-
-      //     }
-      //   })
-      // })
-      // printElement.innerHTML = ''
+      printElement.innerHTML = '';
       this.printContent = '';
     });
-
     return;
-    // console.log('Command\n\n', JSON.stringify(commands))
-    if (this.defaultPrinter) {
-      const loading = await this.alertService.createLoading('Communicating...');
-      loading.present();
-      // this.printerService.printRasterReceipt(this.defaultPrinter.portName, this.defaultPrinter.emulation, commands)
-      //   .then(result => {
-      //     loading.dismiss()
-      //     this.alertService.createAlert('Success!', 'Communication Result: ')
-      //   })
-      //   .catch(error => {
-      //     loading.dismiss()
-      //     this.alertService.createAlert(error)
-      //   })
-    } else {
-      this.alertService.createAlert('Please select a printer');
-    }
   }
 
-  getBase64Image(url) {
+  getBase64Image(url: string) {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'Anonymous';
@@ -304,7 +191,7 @@ export class HomePage implements OnInit {
     });
   }
 
-  b64toBlob(b64Data, contentType) {
+  b64toBlob(b64Data: string, contentType: string) {
     contentType = contentType || '';
     const sliceSize = 512;
     const byteCharacters = atob(b64Data);
@@ -327,7 +214,7 @@ export class HomePage implements OnInit {
     return blob;
   }
 
-  saveFile(content, name?: string): Promise<string> {
+  saveFile(content: Blob, name?: string): Promise<string> {
     const fileName = name ? name : new Date().getTime() + '.png';
     const path = this.file.dataDirectory;
     const options: IWriteOptions = { replace: true };
