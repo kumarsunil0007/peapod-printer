@@ -45,6 +45,20 @@ body {
         text-decoration: none;
     }
 }
+.order-item {    
+    .search-bar {
+        .searchbar-input-container{
+            input.searchbar-input{
+                padding-inline-start:36px;
+            }
+        }
+        
+        ion-icon{
+            left: 10px;
+            width: 18px;
+        }
+    }
+}
 
 .order-html {
     span {

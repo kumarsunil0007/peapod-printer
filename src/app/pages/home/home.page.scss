@@ -12,27 +12,48 @@ ion-header {
 }
 
 ion-content {
-    .order-item{
-        --padding-start:0px;
+    .order-item {
+        --padding-start: 0px;
         --inner-padding-end: 0px;
+        --border-style: none;
+
+        .search-bar {
+            padding-left: 0;
+            --background: #0000000a;
+            --border-radius: 30px;
+            position: relative;     
+            padding-inline-end: 6px;   
+            --box-shadow: 0;    
+        }
     }
-    .text-center{
+
+    .text-center {
         text-align: center;
     }
-    ion-item{
+
+    .print-recipt {
+        text-align: center;
+    }
+
+    ion-item {
         ion-label {
             font-weight: 500;
             font-size: 1rem;
-            margin-bottom: 10px;
+            margin: 0;
             overflow: visible;
-        }
-        .search-btn{
+            flex: 0 0 78px;
+            min-width: 78px
+        }    
+        .search-btn {
             --background: #65ba48;
             color: #fff;
             --border-color: #fff;
-           height: 35px;
-        }
+            height: 35px;
+            width: 70px;
+            margin-inline: 0px;
+        }   
     }
+
     ion-button.print-btn {
         --background: #65ba48;
         --border-color: #fff;
@@ -44,30 +65,58 @@ ion-content {
         color: #ffffff;
         letter-spacing: 0.2px;
     }
-    .order-html{
+
+    .order-html {
         text-align: center;
         border: 1px solid #b0b0b0;
         padding: 20px;
     }
-    
-   
+
+
     .quantity-outer {
         padding: 7% 0%;
+
         .quantity-btns {
             display: flex;
             justify-content: flex-start;
             align-items: center;
         }
     }
-    .quantity-controls{
+
+    .quantity-controls {
         display: inline-block;
     }
-    .print-quantity{
+
+    .print-quantity {
         font-size: 1.5rem;
-    padding: 0px 5px;
-    line-height: 30px;
+        padding: 0px 5px;
+        line-height: 30px;
     }
 }
+
 .text-right {
     text-align: right;
+}
+
+@media (min-width:768px) and (max-width:1280px) {
+    ion-content {
+        ion-item {  
+            .search-btn {
+                width: 100px;
+            }   
+        }
+        .order-html {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        ion-button.print-btn {
+            margin: 0px auto;
+        }
+
+        .print-recipt {
+            text-align: right;
+            padding-right: 0;
+        }
+    }
 }
